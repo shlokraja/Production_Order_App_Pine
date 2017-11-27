@@ -1,0 +1,632 @@
+﻿<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1280, initial-scale=1.0" />
+    <title>Order app</title>
+    <link rel="stylesheet" href="css/foundation.min.css" />
+    <link rel="stylesheet" href="css/index.css" />
+    <script src="js/vendor/modernizr.js"></script>
+</head>
+<body>
+    <div id="stop_orders">
+        Ordering is currently suspended. Please contact staff.
+    </div>
+    <div id="mainsection">
+        <div id="food_items" class="small-8 large-8 columns">
+            <div id="order_delay_text">
+                We are loading food trays. This may take 3-5 minutes to complete.
+                Please bear with us as your order will take time to dispense
+            </div>
+            <div class="listCont">
+                <div id="dispenser_items_TATA" class="menu_TATA">
+                </div>
+                <div id="dispenser_items" class="menu">
+                </div>
+                <div id="outside_items" class="outside_menu">
+                </div>
+            </div>
+            <div id="selector_button">
+                <div id="button_text">SNACKS & DRINKS</div>
+                <img id="meals_img" src="img/teacup.png" />
+            </div>
+        </div>
+        <div id="order_summary" class="small-4 large-4 columns">
+            <h3>ORDER SUMMARY - V2.5</h3>
+            <div id="tablediv">
+                <table cellpadding="0" cellspacing="0" border="0">
+                    <thead>
+                        <tr>
+                            <th><img src="img/edit.png" /></th>
+                            <th>Item Name</th>
+                            <th>Qty</th>
+                            <th width="90px">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div id="total_amount">
+                <div class="text">Total (including tax)</div>
+                <div class="rupee"></div>
+                <div class="num"></div>
+            </div>
+            <div id="button_row">
+                <button id="cancel_order" class="button small alert radius">CLEAR</button>
+                <button id="proceed_order" class="button small success radius">BUY</button>
+            </div>
+        </div>
+    </div>
+    <div id="item_popup" class="reveal-modal small" data-reveal aria-labelledby="name"
+         aria-hidden="true" role="dialog">
+        <input id="item_code" type="hidden">
+        <div id="popup_area">
+            <img id="main_picture" src="" />
+            <div id="item_button" align="center">
+                <div id="decrease"><img src="img/minusgreen.png" /></div>
+                <div id="quantity">1</div>
+                <div id="increase"><img src="img/plusgreen.png" /></div>
+            </div>
+            <div id="main_alert_text">
+                <div id="main_note_text">Note:&nbsp;</div>
+                <div id="main_alert_sub"></div>
+            </div>
+            <div id="coke_area">
+                <img id="coke_picture" src="img/coke.png" height="150px" width="150px" />
+                <div id="coke_button">
+                    <div id="coke_decrease"><img src="img/minusgreen.png" /></div>
+                    <div id="coke_quantity">0</div>
+                    <div id="coke_increase"><img src="img/plusgreen.png" /></div>
+                </div>
+                <div id="alert_text">
+                    <div id="note_text">Note:&nbsp;</div>
+                    <div id="alert_sub"></div>
+                </div>
+            </div>
+        </div>
+        <div id="popup_buttons">
+            <button id="pop_cancel_btn" class="close-reveal-modal button small" aria-label="Close">
+                CANCEL
+            </button>
+            <button id="pop_action_btn" class="close-reveal-modal button small pull-right"
+                    aria-label="Close">
+                CONFIRM
+            </button>
+        </div>
+    </div>
+    <div id="passwordPopUp" class="reveal-modal small" data-reveal aria-hidden="true" role="dialog">
+        Enter password <input id="passwd" type="password" />
+        <a id="passwd_btn" class="close-reveal-modal button small radius info">Enter</a>
+    </div>
+    <div id="settingsModal" class="reveal-modal small" data-reveal aria-hidden="true" role="dialog">
+        <a id="editText_btn" class="button small alert radius">Edit</a>
+        <div id="settings-boxes">
+            <div class="row">
+                <div class="small-4 columns no_padding">
+                    <label for="accept_cards" class="right checkbox_label">Accept card</label>
+                    <input id="accept_cards" name="accept_cards" type="checkbox" checked=true />
+                </div>
+                <div class="small-4 columns">
+                    <label for="accept_cash" class="right checkbox_label">Accept cash</label>
+                    <input id="accept_cash" name="accept_cash" type="checkbox" />
+                </div>
+                <div class="small-4 columns">
+                    <label for="show_snacks" class="right checkbox_label">Show snacks</label>
+                    <input type="checkbox" id="show_snacks" name="show_snacks" checked=true>
+                </div>
+            </div>
+            <div class="row">
+                <div class="small-4 columns no_padding">
+                    <label for="others_mandatory" class="right checkbox_label">Accept Others</label>
+                    <input type="checkbox" id="others_mandatory" name="others_mandatory">
+                </div>
+                <div class="small-4 columns">
+                    <label for="mobile_mandatory" class="right checkbox_label">Mobile No</label>
+                    <input type="checkbox" id="mobile_mandatory" name="mobile_mandatory" checked=true>
+                </div>
+                <div class="small-4 columns">
+                    <label for="item_images" class="right checkbox_label">Show Item Images</label>
+                    <input type="checkbox" id="item_images" name="item_images" checked=true>
+                </div>
+            </div>
+            <div class="row" id="country_div">
+                <div class="small-12 columns">
+                    <div class="small-4 columns">
+                        <label for="country_type" class="right inline">Country </label>
+                    </div>
+                    <div class="small-8 columns">
+                        <select id="country_type" name="options">
+                            <option selected>--Select--</option>
+                            <option selected>India</option>
+                            <option selected>Singapore</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="small-12 columns">
+                    <div class="small-4 columns">
+                        <label for="hq_url" class="right inline">HQ URL</label>
+                    </div>
+                    <div class="small-8 columns">
+                        <input type="text" id="hq_url" name="hq_url" value="http://atchayam.gofrugal.com:8008" disabled />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="small-12 columns">
+                    <div class="small-4 columns">
+                        <label for="outlet_url" class="right inline">OUTLET URL</label>
+                    </div>
+                    <div class="small-8 columns">
+                        <input type="text" id="outlet_url" name="outlet_url" value="http://192.168.1.47:8000" disabled />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="small-12 columns">
+                    <div class="small-4 columns">
+                        <label for="websocket_url" class="right inline">WEBSOCKET URL</label>
+                    </div>
+                    <div class="small-8 columns">
+                        <input type="text" id="websocket_url" name="websocket_url" value="http://192.168.1.47:8000" disabled />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="small-12 columns">
+                    <div class="small-4 columns">
+                        <label for="settings_passwd" class="right inline">Settings password</label>
+                    </div>
+                    <div class="small-8 columns">
+                        <input type="password" id="settings_passwd" name="settings_passwd" disabled />
+                    </div>
+                </div>
+            </div>
+            <div class="row" id="payment_div">
+                <div class="small-12 columns">
+                    <div class="small-4 columns">
+                        <label for="payment_type" class="right inline">Payment Gateway Type</label>
+                    </div>
+                    <div class="small-8 columns">
+                        <select id="payment_type" name="options">
+                            <option selected>--Select--</option>
+                            <option selected>SingaporePayment</option>
+                            <option selected>MSwipeInterface</option>
+                            <option selected>Ongo</option>
+                            <option selected>PineLabsPayment</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="small-12 columns">
+                    <div class="small-3 columns no_padding">
+                        <label for="outlet_id" class="right inline">OUTLET ID</label>
+                    </div>
+                    <div class="small-3 columns no_padding">
+                        <input type="text" id="outlet_id" name="outlet_id" value="1" disabled />
+                    </div>
+                    <div class="small-3 columns">
+                        <label for="counter_code" class="right inline">Counter Code</label>
+                    </div>
+                    <div class="small-3 columns">
+                        <input type="text" id="counter_code" name="counter_code" value="2" disabled />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="small-12 columns">
+                    <div class="small-3 columns no_padding">
+                        <label for="inspire_digest_auth" class="right inline">
+                            Inspirenetz
+                            digest_auth
+                        </label>
+                    </div>
+                    <div class="small-3 columns no_padding">
+                        <input type="text" id="inspire_digest_auth" name="inspire_digest_auth"
+                               disabled />
+                    </div>
+                    <div class="small-3 columns">
+                        <label for="inspire_http_url" class="right inline">Inspirenetz http url</label>
+                    </div>
+                    <div class="small-3 columns">
+                        <input type="text" id="inspire_http_url" name="inspire_http_url" disabled />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="small-12 columns">
+                    <div class="small-3 columns no_padding">
+                        <label for="inspire_username" class="right inline">Inspirenetz username</label>
+                    </div>
+                    <div class="small-3 columns no_padding">
+                        <input type="text" id="inspire_username" name="inspire_username" disabled />
+                    </div>
+                    <div class="small-3 columns">
+                        <label for="inspire_password" class="right inline">Inspirenetz password</label>
+                    </div>
+                    <div class="small-3 columns">
+                        <input type="password" id="inspire_password" name="inspire_password" disabled />
+                    </div>
+                </div>
+
+            </div>
+            <div class="row" id="MSwipe_Payment_Details">
+                <div class="small-12 columns">
+                    <div class="small-3 columns no_padding">
+                        <label for="mswipe_username" class="right inline">Mswipe username</label>
+                    </div>
+                    <div class="small-3 columns no_padding">
+                        <input type="text" id="mswipe_username" name="mswipe_username" disabled />
+                    </div>
+                    <div class="small-3 columns">
+                        <label for="mswipe_password" class="right inline">Mswipe password</label>
+                    </div>
+                    <div class="small-3 columns">
+                        <input type="password" id="mswipe_password" name="mswipe_password" disabled />
+                    </div>
+                </div>
+                <div class="small-12 columns" align="center">
+                    <button id="connect_device_btn"
+                            class="button small radius " aria-label="Close">
+                        Connect
+                        to Device
+                    </button>
+                    &nbsp;
+                    <button id="authenticate_device_btn"
+                            class="button small radius ">
+                        Authenticate
+                        with device
+                    </button>
+                    &nbsp;
+                    <button id="bank_summary_btn"
+                            class="button small radius ">
+                        Bank Summary
+                    </button>
+                </div>
+            </div>
+
+            <div class="row" id="Ongo_Payment_Details">
+                <div class="small-12 columns">
+                    <div class="small-3 columns no_padding">
+                        <label for="Ongo_Merchant_ID" class="right inline">Merchant ID </label>
+                    </div>
+                    <div class="small-3 columns no_padding">
+                        <input type="text" id="Ongo_Merchant_ID" placeholder="15 digit alphanumeric" name="Ongo_Merchant_ID" disabled required />
+                    </div>
+                    <div class="small-3 columns">
+                        <label for="Ongo_Terminal_ID" class="right inline">Terminal ID</label>
+                    </div>
+                    <div class="small-3 columns">
+                        <input type="text" id="Ongo_Terminal_ID" placeholder="8 digit alphanumeric" name="Ongo_Terminal_ID" disabled required />
+                    </div>
+                </div>
+                <div class="small-12 columns">
+                    <div class="small-3 columns no_padding">
+                        <label for="Ongo_Blutooth_Name" class="right inline">Bluetooth Name</label>
+                    </div>
+                    <div class="small-3 columns no_padding">
+                        <input type="text" id="Ongo_Blutooth_Name" placeholder="RA0017XX" name="Ongo_Bluetooth_Name" disabled required />
+                    </div>
+                    <div class="small-3 columns">
+                        <label for="Ongo_Blutooth_Addrs" class="right inline">Bluetooth Address</label>
+                    </div>
+                    <div class="small-3 columns">
+                        <input type="text" id="Ongo_Blutooth_Addrs" placeholder="00:00:00:00:00:00" name="Ongo_Bluetooth_Addrs"
+                               disabled required />
+                    </div>
+                </div>
+                <div class="small-12 columns" align="center">
+                    <button id="authenticate_ongo_device_btn"
+                            class="button small radius ">
+                        Authenticate
+                        with device
+                    </button>
+                </div>
+            </div>
+            <div class="row" id="Singapore_Payment_Details">
+                <div class="small-12 columns">
+                    <div class="small-3 columns no_padding">
+                        <label for="Singapore_IP_Address" class="right inline">IP Address </label>
+                    </div>
+                    <div class="small-3 columns no_padding">
+                        <input type="text" id="Singapore_IP_Address" placeholder="15 digit alphanumeric" name="Singapore_IP_Address" disabled required />
+                    </div>
+                    <div class="small-3 columns">
+                        <label for="Singapore_Port_Number" class="right inline">Port Number</label>
+                    </div>
+                    <div class="small-3 columns">
+                        <input type="text" id="Singapore_Port_Number" placeholder="4 digit numeric" name="Singapore_Port_Number" disabled required />
+                    </div>
+                </div>
+
+                <div class="small-12 columns" align="center">
+                    <button id="authenticate_Singapore_device_btn"
+                            class="button small radius ">
+                        Authenticate
+                        with device
+                    </button>
+                </div>
+            </div>
+            <div class="row" id="PineLabs_Payment_Details">
+                <div class="small-12 columns">
+                    <div class="small-3 columns no_padding">
+                        <label for="PineLabs_Merchant_ID" class="right inline">Merchant ID </label>
+                    </div>
+                    <div class="small-3 columns no_padding">
+                        <input type="text" id="PineLabs_Merchant_ID"  placeholder="Merchant ID" name="PineLabs_Merchant_ID" disabled required />
+                    </div>
+                    <div class="small-3 columns">
+                        <label for="PineLabs_Security_Token" class="right inline">Security Token</label>
+                    </div>
+                    <div class="small-3 columns">
+                        <input type="text" id="PineLabs_Security_Token"  placeholder="Security Token" name="PineLabs_Security_Token" disabled required />
+                    </div>
+                </div>
+                <div class="small-12 columns">
+                    <div class="small-3 columns no_padding">
+                        <label for="PineLabs_Store_Pos_Code" class="right inline">Store POS Code</label>
+                    </div>
+                    <div class="small-3 columns no_padding">
+                        <input type="text" id="PineLabs_Store_Pos_Code"  placeholder="Merchant Store PosCode" name="PineLabs_Store_Pos_Code" disabled required />
+                    </div>
+                    <div class="small-3 columns">
+                        <label for="PineLabs_IMEI" class="right inline">IMEI</label>
+                    </div>
+                    <div class="small-3 columns">
+                        <input type="text" id="PineLabs_IMEI" placeholder="IMEI"  name="PineLabs_IMEI"
+                               disabled required />
+                    </div>
+                </div>
+                <div class="small-12 columns">
+                    <div class="small-3 columns no_padding">
+                        <label for="PineLabs_User_ID" class="right inline">User ID</label>
+                    </div>
+                    <div class="small-3 columns no_padding">
+                        <input type="text" id="PineLabs_User_ID" placeholder="User ID"   name="PineLabs_User_ID" disabled required />
+                    </div>
+                    <div class="small-3 columns">
+                        <label for="PineLabs_TransactionNumber" class="right inline">Transaction Number</label>
+                    </div>
+                    <div class="small-3 columns">
+                        <input type="text" id="PineLabs_TransactionNumber" placeholder="Transaction Number" value='freshly'  name="PineLabs_TransactionNumber" value="FoodBox"
+                               disabled required />
+                        <input type="hidden" id="PineLabs_SequenceNumber"/>
+                    </div>
+                </div>
+                <div class="small-12 columns" align="center">
+                    <button id="authenticate_PineLabs_device_btn"
+                            class="button small radius ">
+                        Authenticate
+                        with device
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="small-12 columns">
+                    <label for="show_logs" class="right inline checkbox_label">Show logs</label>
+                    <textarea id="logs_area" rows="10" cols="50"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="row" align="right">
+            <div class="small-12 columns">
+                <button id="settings_cancel_btn" class="close-reveal-modal button small radius"
+                        aria-label="Close">
+                    Cancel
+                </button>
+                &nbsp;
+
+                <button id="email_logs_btn" class="button small radius ">
+                    Email Logs
+                </button>
+                &nbsp;
+                <button id="clear_locks_btn" class="button small radius ">
+                    Clear All Locks
+                </button>
+                &nbsp;
+                <button id="saveSettings_btn" class="button small radius"
+                        aria-label="Close">
+                    Save
+                </button>
+            </div>
+
+        </div>
+        <div id="status_text" class="row"></div>
+    </div>
+    <div id="finalOrder" class="reveal-modal small" data-reveal aria-hidden="true" role="dialog">
+        <h3>CHECKOUT</h3>
+        <div id="checkout_area">
+            <div id="checkout_table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Qty</th>
+                            <th width="90px">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div id="checkout_calc">
+                <div id="mobile_num_div" class="text">
+                    Enter&nbsp;mobile&nbsp;no:&nbsp;(to&nbsp;receive&nbsp;bill)
+                    <input type="number" id="mobile_num" placeholder="99xxxxxxxx" style="font-size: 25px;" />
+                </div>
+                <div class="row" id="total_without_tax">
+                    <div class="small-8 columns text">Total (before tax)</div>
+                    <div class="small-1 columns rupee"></div>
+                    <div class="small-3 columns num"></div>
+                </div>
+                <div class="row" id="total_gst">
+                    <div class="small-8 columns text">GST Tax Value</div>
+                    <div class="small-1 columns rupee"></div>
+                    <div class="small-3 columns num"></div>
+                </div>
+                <hr />
+                <div class="row" row id="total">
+                    <div class="small-8 columns text">Total (including tax)</div>
+                    <div class="small-1 columns rupee"></div>
+                    <div class="small-3 columns num"></div>
+                </div>
+            </div>
+        </div>
+        <div id="no_mobile_error" class="text">Entered mobile no. is not correct</div>
+        <div id="checkout_buttons">
+            <button id="back_btn" class="close-reveal-modal button small" aria-label="Close">
+                BACK
+            </button>
+            <button id="cash_btn" class="cash_payment button small" aria-label="Close">CASH</button>
+            <button id="card_btn" class="button small" aria-label="Close">CARD</button>
+            <button id="other_btn" class="button small" aria-label="Close">OTHERS</button>
+        </div>
+    </div>
+    <div id="cash_checkout" class="reveal-modal small" data-reveal aria-hidden="true" role="dialog">
+        <div class="title">ORDER PLACED</div>
+        <div class="payment_area">
+            <div class="savings_text">
+                Your Order no. is:
+                <div class="order_no">10</div> was successful!
+            </div>
+            <div class="payment_text">
+                Please Proceed the payment!
+                <div class="rupee"></div>
+                <div class="cash_amount"></div>
+            </div>
+            <div class="closing_text">Closing in 5 seconds...</div>
+        </div>
+        <div class="sides">
+            <div class="first_line">PLEASE PICK UP YOUR SIDES</div>
+        </div>
+    </div>
+    <div id="card_checkout" class="reveal-modal small" data-reveal aria-hidden="true" role="dialog">
+        <div class="title">SWIPE CARD</div>
+        <div class="payment_area">
+            <div class="savings_text">
+                Your Order no. is:
+                <div class="order_no">10</div>
+            </div>
+            <video id="swipe_video" autoplay="true" loop muted>
+                <source  src="file:///storage/emulated/0/swipe.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="swipe_card_btn_div">
+                <button class="back_btn" aria-label="Close">BACK</button>
+            </div>
+        </div>
+        <div class="sides">
+            <div class="first_line">PLEASE PICK UP YOUR SIDES</div>
+        </div>
+    </div>
+    <div id="card_success" class="reveal-modal small" data-reveal aria-hidden="true" role="dialog">
+        <div class="title">ORDER PLACED</div>
+        <div class="payment_area">
+            <div class="order_text">
+                Your Order no. is:
+                <div class="order_no">10</div>
+            </div>
+            <div class="payment_text">
+                Your payment of
+                <div class="rupee"></div>
+                <div class="cash_amount"></div>
+                was successful!
+            </div>
+            <div class="closing_text">Closing in 5 seconds...</div>
+        </div>
+        <div class="sides">
+            <div class="first_line">PLEASE PICK UP YOUR SIDES</div>
+        </div>
+    </div>
+    <div id="card_failure" class="reveal-modal small" data-reveal aria-hidden="true" role="dialog">
+        <div class="title">SWIPE CARD</div>
+        <div class="payment_area">
+            <div class="payment_text">
+                Your payment of
+                <div class="rupee"></div>
+                <div class="cash_amount"></div>
+                failed.
+            </div>
+            <div class="next_line">Please retry or pay using a different method</div>
+            <div id="failure_reason" class="next_line"></div>
+            <div class="swipe_card_btn_div">
+                <button class="back_btn" aria-label="Close">BACK</button>
+            </div>
+        </div>
+        <div class="sides">
+            <div class="first_line">PLEASE PICK UP YOUR SIDES</div>
+        </div>
+    </div>
+
+    <div id="othersPayment" class="reveal-modal small" data-reveal aria-hidden="true" role="dialog">
+        <div class="title">Payment Type</div>
+        <div class="payment_area marginalign">
+            <div class="payment_text">
+                <select id="others_payment_type" name="options">
+                    <option selected>--Select Payment Type--</option>
+                    <option value="sodexocard" selected>Sodexo Card</option>
+                    <option value="sodexocoupon" selected>Sodexo Coupon</option>
+                    <option value="credit" selected>Credit</option>
+                    <option value="gprscard" selected>GPRS Card</option>
+                    <option value="Wallet" selected>Wallet</option>
+                </select>
+            </div>
+            <div class="others_payment">
+                <button id="payment_type_back_btn" class="back_btn" aria-label="Close">BACK</button>
+                <button id="payment_type_others_ok" class="button cash_payment">PAY</button>
+            </div>
+
+            <div class="sides">
+                <div class="center">PLEASE PICK UP YOUR ORDER</div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/vendor/fastclick.js"></script>
+    <script type="text/javascript" src="js/vendor/jquery.js"></script>
+    <script type="text/javascript">
+        $(document).bind("mobileinit", function () {
+            $.event.special.tap.tapholdThreshold = 3000;
+
+        });
+        $(function () {
+            FastClick.attach(document.body);
+        });
+
+
+
+    </script>
+    <script type="text/javascript" src="js/vendor/jquery.mobile.js"></script>
+    <script type="text/javascript" src="js/vendor/foundation.min.js"></script>
+    <script type="text/javascript" src="js/vendor/firebase.js"></script>
+    <script type="text/javascript" src="js/vendor/socket.io.js"></script>
+    <script type="text/javascript" src="js/vendor/simpleStorage.js"></script>
+    <script type="text/javascript" src="js/vendor/jquery.retryAjax.js"></script>
+    <script type="text/javascript" src="settings.js"></script>
+    <script type="text/javascript" src="js/myapp.js"></script>
+    <script type="text/javascript" src="js/utils.js"></script>
+    <script>
+        $(document).foundation();
+        // get price details and get stock count from firebase
+        getItemDetails();
+        $("#total_amount .rupee").hide();
+        // displaying or hiding the snacks button depending on the settings
+        snacksVisibility();
+        // get the test mode status
+        getTestMode();
+        // get the dispenser status
+        getDispenserStatus();
+        // get stop orders state
+        getStopOrdersState();
+        // store the run count
+        getRunCount();
+
+
+
+    </script>
+    <script>
+
+    </script>
+    <script type="text/javascript" src="js/eventhandlers.js"></script>
+</body>
+</html>

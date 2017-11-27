@@ -1,0 +1,1 @@
+include ':app', ':MswipeWisepadDRDSDK', ':ksoap2-android-full-2.1.2'

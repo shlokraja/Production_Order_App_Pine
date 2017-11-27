@@ -1,0 +1,23 @@
+#Ignoring the node_modules folder
+menu_display/node_modules
+outlet_app/node_modules
+
+#Ignoring the images folder
+menu_display/images
+
+#Android app stuff
+MSwipeInterface/.gradle
+MSwipeInterface/local.properties
+MSwipeInterface/.idea/workspace.xml
+MSwipeInterface/.idea/runConfigurations.xml
+MSwipeInterface/.idea/misc.xml
+MSwipeInterface/.idea/libraries
+MSwipeInterface.DS_Store
+MSwipeInterface/build
+MSwipeInterface/app/build
+MSwipeInterface/captures
+
+#Ignoring the setup init script to fill in env variables
+.bootstraprc
+/MSwipeInterface/app/OrderApp_Clear_Lock_070920163.apk
+/MSwipeInterface/app/09072016-OrderApp.apk

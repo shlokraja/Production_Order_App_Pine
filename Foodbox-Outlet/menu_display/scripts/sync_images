@@ -1,0 +1,4 @@
+#This script runs every hour to refresh images from HQ
+MAILTO=agniva.quicksilver@gmail.com
+
+0 * * * * ubuntu /opt/foodbox_menu_display/scripts/new_sync_images.sh 2>&1

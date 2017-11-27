@@ -1,0 +1,87 @@
+<html>
+<head>
+    <title>iisnode logs</title>
+    <style type="text/css">
+        body
+        {
+            font-family: "Trebuchet MS" , Arial, Helvetica, sans-serif;
+        }
+        table
+        {
+            border-collapse: collapse;
+        }
+        td, th
+        {
+            border: 1px solid lightgray;
+            padding: 3px 7px 2px 7px;
+        }
+        th
+        {
+            text-align: left;
+            padding-top: 5px;
+            padding-bottom: 4px;
+            background-color: Gray;
+            color: #ffffff;
+        }
+        td.stderr
+        {
+            color: Red;
+        }
+    </style>
+</head>
+<body>
+    <table id="logFilesTable">
+        <tr>
+            <th>
+                Computer name
+            </th>
+            <th>
+                PID
+            </th>
+            <th>
+                Type
+            </th>
+            <th>
+                Created
+            </th>
+            <th>
+                Link
+            </th>
+        </tr>
+    </table>
+    <p id="lastUpdated"></p>
+    <script type="text/javascript">
+
+        // this is replaced with actual data at runtime by code in interceptor.js
+        var logFiles = [{"file":"SHLOK32-1596-stderr-1461933261920.txt","computername":"SHLOK32","pid":1596,"type":"stderr","created":1461933261920},{"file":"SHLOK32-1900-stderr-1461990266679.txt","computername":"SHLOK32","pid":1900,"type":"stderr","created":1461990266679},{"file":"SHLOK32-2120-stderr-1462595183120.txt","computername":"SHLOK32","pid":2120,"type":"stderr","created":1462595183120},{"file":"SHLOK32-2184-stderr-1462595182683.txt","computername":"SHLOK32","pid":2184,"type":"stderr","created":1462595182683},{"file":"SHLOK32-2760-stderr-1461933261483.txt","computername":"SHLOK32","pid":2760,"type":"stderr","created":1461933261483},{"file":"SHLOK32-3488-stderr-1461834116179.txt","computername":"SHLOK32","pid":3488,"type":"stderr","created":1461834116179},{"file":"SHLOK32-3560-stderr-1462005815976.txt","computername":"SHLOK32","pid":3560,"type":"stderr","created":1462005815976},{"file":"SHLOK32-3960-stderr-1462191193683.txt","computername":"SHLOK32","pid":3960,"type":"stderr","created":1462191193683},{"file":"SHLOK32-3980-stderr-1461990267116.txt","computername":"SHLOK32","pid":3980,"type":"stderr","created":1461990267116},{"file":"SHLOK32-4048-stderr-1462594769511.txt","computername":"SHLOK32","pid":4048,"type":"stderr","created":1462594769511},{"file":"SHLOK32-4200-stderr-1461989974438.txt","computername":"SHLOK32","pid":4200,"type":"stderr","created":1461989974438},{"file":"SHLOK32-4840-stderr-1462005816533.txt","computername":"SHLOK32","pid":4840,"type":"stderr","created":1462005816533},{"file":"SHLOK32-4996-stderr-1461989973986.txt","computername":"SHLOK32","pid":4996,"type":"stderr","created":1461989973986},{"file":"SHLOK32-5044-stderr-1461834115797.txt","computername":"SHLOK32","pid":5044,"type":"stderr","created":1461834115797},{"file":"SHLOK32-5624-stderr-1462597991748.txt","computername":"SHLOK32","pid":5624,"type":"stderr","created":1462597991748},{"file":"SHLOK32-5860-stderr-1462597994219.txt","computername":"SHLOK32","pid":5860,"type":"stderr","created":1462597994219},{"file":"SHLOK32-6016-stderr-1464323141296.txt","computername":"SHLOK32","pid":6016,"type":"stderr","created":1464323141296},{"file":"SHLOK32-6040-stderr-1462597994516.txt","computername":"SHLOK32","pid":6040,"type":"stderr","created":1462597994516},{"file":"SHLOK32-644-stderr-1462594768752.txt","computername":"SHLOK32","pid":644,"type":"stderr","created":1462594768752},{"file":"SHLOK32-6740-stderr-1462191194758.txt","computername":"SHLOK32","pid":6740,"type":"stderr","created":1462191194758}];
+        var lastUpdated = 1464323155629;
+        var date = new Date();
+
+        date.setTime(lastUpdated);
+        document.getElementById('lastUpdated').innerHTML = 'Index was last updated ' + date;
+
+        logFiles.sort(function (a, b) {
+            return b.created - a.created;
+        });
+
+        var logFilesTable = document.getElementById("logFilesTable");
+        for (var i = 0; i < logFiles.length; i++) {
+            var logFile = logFiles[i];
+            date.setTime(logFile.created);
+            var row = logFilesTable.insertRow(-1);
+            var computerNameCell = row.insertCell(0);
+            var pidCell = row.insertCell(1);
+            var typeCell = row.insertCell(2);
+            var dateCell = row.insertCell(3);
+            var logCell = row.insertCell(4);
+            computerNameCell.innerHTML = logFile.computername;
+            pidCell.innerHTML = logFile.pid.toString();
+            typeCell.innerHTML = logFile.type;
+            typeCell.setAttribute('class', logFile.type);
+            dateCell.innerHTML = date.toString();
+            logCell.innerHTML = '<a href="' + logFile.file + '">log</a>';
+        };
+
+    </script>
+</body>
+</html>
