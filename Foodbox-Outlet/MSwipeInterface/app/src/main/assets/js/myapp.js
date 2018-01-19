@@ -169,6 +169,7 @@ function getRunCount(mode)
         },
         error: function (jqxhr, textStatus, error)
         {
+            var err_msg = textStatus + ", " + error;
             console.error("Getting run count failed: " + err_msg);
         }
     });

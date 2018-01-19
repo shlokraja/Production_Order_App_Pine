@@ -121,7 +121,7 @@ public class PineLabsGateway implements IPaymentGateway {
                                                     public void run() {
                                                         startCount++;
                                                         Log.v("startCount---" + startCount, "--");
-                                                        if(startCount<=6) {
+                                                        if(startCount<=15) {
                                                             Check_Payment_Status(paymnetResponse.PlutusTransactionReferenceID);
                                                         }
                                                         else{

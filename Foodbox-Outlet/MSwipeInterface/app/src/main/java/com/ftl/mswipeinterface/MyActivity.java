@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.http.SslError;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -13,8 +14,10 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.ConsoleMessage;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Toast;
 import com.ftl.paymentgateway.DeviceState;
 import com.ftl.paymentgateway.IPaymentGateway;
@@ -85,6 +88,12 @@ public class MyActivity extends Activity {
         myWebView.getSettings().setAllowUniversalAccessFromFileURLs(true);
         myWebView.loadUrl("file:///android_asset/index.html");
         myWebView.addJavascriptInterface(new WebAppInterface(this, myWebView), "Android");
+        myWebView.setWebViewClient(new WebViewClient(){
+            @Override
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                handler.proceed();
+            }
+        });
         // Capturing console logs and logging them from the android app
         myWebView.setWebChromeClient(new WebChromeClient() {
             public boolean onConsoleMessage(ConsoleMessage cm) {
@@ -248,11 +257,11 @@ public class MyActivity extends Activity {
                         connectToDevice(false);
                     }
                 case REQUEST_ONGO_GATEWAY:
-                    if (resultCode == 2) {
+                    if (resultCode == 2 ) {
                         String resResult = data.getExtras().getString("Result");
                         logger.debug(TAG, "Failure transaction result" + resResult, this);
                         showCardFailureScreen(resResult);
-                    } else if (resultCode == 0) {
+                    } else if (resultCode == 0 ) {
                         String resResult = data.getExtras().getString("Result");
                         if (resResult.contains("Approved")) {
                             logger.debug(TAG, "Swipe card Transaction Successful" + resResult, this);
@@ -262,10 +271,8 @@ public class MyActivity extends Activity {
                             showCardFailureScreen(resResult);
                         }
                     } else if (resultCode == -1) {
-                        String Card_Holder_Name = data.getExtras().getString("Card_Holder_Name");
-                        String cardNo = data.getExtras().getString("Result").substring(24, 40);
-                        logger.debug(TAG, "Card transaction Successful Card_Holder_Name" + Card_Holder_Name + " Result" + data.getExtras().getString("Result"), this);
-                        showCardSuccessScreen(cardNo, Card_Holder_Name);
+                        //Toast.makeText(mapp, "got approved text from Ongo ResultCode -1", Toast.LENGTH_LONG).show();
+                        showCardSuccessScreen("swipe", "Transaction");
                     } else if (resultCode == 3) {
                         String resResult = data.getExtras().getString("Result");
                         logger.debug(TAG, "Failure transaction result" + resResult, this);
